@@ -7,23 +7,14 @@ RUN apt-get update && apt-get install -y postgresql-client
 # Define o diretório de trabalho no contêiner
 WORKDIR /app
 
-# Copia o package.json e o package-lock.json para o diretório de trabalho
+# Copia apenas arquivos de dependências (evita rebaixar pacotes ao alterar código)
 COPY package*.json ./
 
-# Instalar dependências do projeto
+# Instala dependências do projeto
 RUN npm ci
-
-# Copia arquivos do projeto para o diretório de trabalho
-COPY . .
-
-# Verifique se o módulo crypto está disponível
-RUN node -e "require('crypto').randomUUID(); console.log('crypto module is available');"
-
-# Compile o projeto TypeScript
-RUN npm run build
 
 # Exponha a porta que o aplicativo irá usar
 EXPOSE 3000
 
-# Comando para rodar o aplicativo
-CMD ["node", "dist/main"]
+# Comando padrão para rodar a aplicação no modo desenvolvimento
+CMD ["npm", "run", "start:dev"]

@@ -32,6 +32,10 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
+    volumes:
+      - .:/app  # Monta todo o código dentro do container
+      - /app/node_modules  # Evita conflito com node_modules local
+    command: ["npm", "run", "start:dev"]  # Garante que nodemon rode dentro do container
 
 volumes:
   db_data:
